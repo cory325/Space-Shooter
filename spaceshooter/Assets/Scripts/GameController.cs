@@ -16,6 +16,8 @@ public class GameController : MonoBehaviour
     public Text ScoreText;
     public Text restartText;
     public Text gameOverText;
+    public Text createText;
+    public Text winText;
 
     private bool restart;
     private bool gameOver;
@@ -27,6 +29,8 @@ public class GameController : MonoBehaviour
         restart = false;
         restartText.text = "";
         gameOverText.text = "";
+        winText.text = "";
+        createText.text = "";
         score = 0;
         UpdateScore ();
         StartCoroutine (SpawnWaves ());
@@ -36,9 +40,9 @@ public class GameController : MonoBehaviour
     {
         SceneManager.LoadScene("spaceshooter");
         {
-            if (Input.GetKeyDown (KeyCode.R))
+            if (Input.GetKeyDown (KeyCode.Q))
             {
-                Application.LoadLevel (Application.loadedLevel);
+
             }
 
             if(Input.GetKey("escape"))
@@ -63,7 +67,7 @@ public class GameController : MonoBehaviour
 
             if (gameOver)
             {
-                restartText.text = "Press 'R' for Restart";
+                restartText.text = "Press 'Q' for Restart";
                 restart = true;
                 break;
 
@@ -81,8 +85,15 @@ public class GameController : MonoBehaviour
     void UpdateScore()
     {
         ScoreText.text = "Score: " + score;
-    }
+        if (score >= 200)
+        {
+            winText.text = "You win!";
+            createText.text = "Game Created By Cory";
+            gameOver = true;
+            restart = true;
+        }
 
+    }
     public void GameOver ()
     {
         gameOverText.text = "Game Over!";

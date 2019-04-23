@@ -16,17 +16,27 @@ public class Done_PlayerController : MonoBehaviour
 	public GameObject shot;
 	public Transform shotSpawn;
 	public float fireRate;
-	 
-	private float nextFire;
-	
-	void Update ()
+
+    private AudioSource source;
+
+    private float nextFire;
+
+
+    void Awake()
+    {
+        source = GetComponent<AudioSource>();
+    }
+
+    void Update ()
 	{
 		if (Input.GetButton("Fire1") && Time.time > nextFire) 
 		{
 			nextFire = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-			GetComponent<AudioSource>().Play ();
-		}
+            {
+                source.Play();
+            }
+        }
 	}
 
 	void FixedUpdate ()

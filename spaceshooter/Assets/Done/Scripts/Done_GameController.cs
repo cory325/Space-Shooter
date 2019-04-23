@@ -12,35 +12,73 @@ public class Done_GameController : MonoBehaviour
     public float startWait;
     public float waveWait;
 
-    public Text scoreText;
+    public bool winCondition;
+   
+    public Text pointsText;
     public Text restartText;
     public Text gameOverText;
+    public Text createText;
+    public Text winText;
+    public Text hardText;
 
     private bool gameOver;
     private bool restart;
-    private int score;
+    private int points;
+
+    private AudioSource audioSource;
+    public AudioClip winMusic;
+    public AudioClip loseMusic;
+    public AudioClip mainMusic;
+
+
 
     void Start()
     {
         gameOver = false;
         restart = false;
+        winCondition = false;
         restartText.text = "";
         gameOverText.text = "";
-        score = 0;
+        winText.text = "";
+        createText.text = "";
+        points = 0;
         UpdateScore();
         StartCoroutine(SpawnWaves());
+        audioSource.clip = mainMusic;
+        audioSource.Play();
+    }
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
         if (restart)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene("Done_Main");
+            }
+
+        }
+        if (Input.GetKey("escape"))
+            Application.Quit();
+
+        {
+            if (points >= 100)
+            {
+                audioSource.clip = winMusic;
+                audioSource.Play();
             }
         }
+
+  
+
     }
+
+
 
     IEnumerator SpawnWaves()
     {
@@ -59,27 +97,42 @@ public class Done_GameController : MonoBehaviour
 
             if (gameOver)
             {
-                restartText.text = "Press 'R' for Restart";
+                restartText.text = "Press 'Q' for Restart";
                 restart = true;
                 break;
             }
+
+
         }
     }
 
     public void AddScore(int newScoreValue)
     {
-        score += newScoreValue;
+
+        points += newScoreValue;
         UpdateScore();
     }
 
     void UpdateScore()
-    {
-        scoreText.text = "Score: " + score;
+        {
+            pointsText.text = "Points: " + points;
+            if (points >= 200)
+            {
+                winText.text = "You win!";
+                createText.text = "Game Created By Cory";
+                gameOver = true;
+                restart = true;
+            winCondition = true;
+            }
+
+        
     }
 
     public void GameOver()
     {
         gameOverText.text = "Game Over!";
         gameOver = true;
+        audioSource.clip = loseMusic;
+        audioSource.Play();
     }
 }
