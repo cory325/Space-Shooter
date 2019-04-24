@@ -11,6 +11,8 @@ public class Done_GameController : MonoBehaviour
     public float spawnWait;
     public float startWait;
     public float waveWait;
+    public float timeLeft = 15.0f;
+    public Text startText;
 
     public bool winCondition;
    
@@ -21,9 +23,11 @@ public class Done_GameController : MonoBehaviour
     public Text winText;
     public Text hardText;
 
+
     private bool gameOver;
     private bool restart;
     private int points;
+
 
     private AudioSource audioSource;
     public AudioClip winMusic;
@@ -46,6 +50,7 @@ public class Done_GameController : MonoBehaviour
         StartCoroutine(SpawnWaves());
         audioSource.clip = mainMusic;
         audioSource.Play();
+
     }
 
     void Awake()
@@ -55,6 +60,7 @@ public class Done_GameController : MonoBehaviour
 
     void Update()
     {
+       
         if (restart)
         {
             if (Input.GetKeyDown(KeyCode.Q))
@@ -66,17 +72,12 @@ public class Done_GameController : MonoBehaviour
         if (Input.GetKey("escape"))
             Application.Quit();
 
-        {
-            if (points >= 100)
-            {
-                audioSource.clip = winMusic;
-                audioSource.Play();
-            }
-        }
+
 
   
 
     }
+
 
 
 
@@ -113,6 +114,10 @@ public class Done_GameController : MonoBehaviour
         UpdateScore();
     }
 
+  
+
+
+
     void UpdateScore()
         {
             pointsText.text = "Points: " + points;
@@ -123,7 +128,9 @@ public class Done_GameController : MonoBehaviour
                 gameOver = true;
                 restart = true;
             winCondition = true;
-            }
+            audioSource.clip = winMusic;
+            audioSource.Play();
+        }
 
         
     }
